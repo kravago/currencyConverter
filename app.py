@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, flash
 from forex_python.converter import CurrencyRates, CurrencyCodes
 from decimal import *
 
@@ -6,6 +6,7 @@ c = CurrencyRates(force_decimal=True)
 codes = CurrencyCodes()
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'LETSCONVERTMONEY'
 
 @app.route('/')
 def home():
@@ -16,6 +17,24 @@ def convert():
     currency1 = request.args.get('currency1')
     currency2 = request.args.get('currency2')
     amount = request.args.get('amount')
+
+    # Check the inputs
+    messages=[]
+    if codes.get_currency_name(currency1) is None:
+        messages.append(f'{currency1} is not a valid currency code')
+
+    if codes.get_currency_name(currency2) is None:
+        messages.append(f'{currency2} is not a valid currency code')
+
+    if currency2.isnumeric() == False:
+        messages.append(f'f{amount} is an invalid amount')
+
+    if len(messages) > 0:
+        for message in messages:
+            flash(message)
+
+        return render_template('index.html')
+    
     result = c.convert(base_cur=currency1, dest_cur=currency2, amount=Decimal(amount))
 
     return render_template('results.html',
