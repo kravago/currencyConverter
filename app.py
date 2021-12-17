@@ -27,7 +27,7 @@ def convert():
     if codes.get_currency_name(currency2) is None:
         messages.append(f'{currency2} is not a valid currency code')
 
-    if Decimal(amount) is None:
+    if amount.isnumeric() == False:
         messages.append(f'{amount} is an invalid amount')
 
     if len(messages) > 0:
