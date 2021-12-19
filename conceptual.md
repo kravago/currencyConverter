@@ -45,7 +45,7 @@ Answer the following questions below:
   ```
 
 - How do you collect data from the body of the request using Flask?
-  * 
+  * You will collect data from the body by using request from flask like before, only this time you should use ```request.form``` or ```request.data``` 
 
 - What is a cookie and what kinds of things are they commonly used for?
   * A cookie is a key value pair that is sent to the client via the server.
